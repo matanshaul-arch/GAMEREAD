@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ממלכת המילים הקסומה</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="game-shell" aria-labelledby="game-title">
+      <section class="top-bar" aria-label="מצב המשחק">
+        <div>
+          <p class="eyebrow">אב־טיפוס למידה</p>
+          <h1 id="game-title">ממלכת המילים הקסומה</h1>
+        </div>
+        <div class="stats" aria-live="polite">
+          <span>כוכבים: <strong id="star-count">0</strong></span>
+          <span>שערים שנפתחו: <strong id="gate-count">0</strong></span>
+        </div>
+      </section>
+
+      <section class="layout">
+        <section class="map-panel" aria-label="מפת המשחק">
+          <canvas id="game-map" width="640" height="448" aria-label="מפת עולם שבה השחקן זז עם המקשים"></canvas>
+          <div class="controls-help">
+            <span>תנועה: מקשי חיצים או W A S D</span>
+            <span>כניסה למשימה: רווח</span>
+          </div>
+        </section>
+
+        <aside class="lesson-panel" aria-label="משימת למידה">
+          <div id="idle-card" class="lesson-card">
+            <h2>מצא/י אזור לימוד במפה</h2>
+            <p>גש/י אל שער עברית, מערת הניקוד או מגדל האנגלית ולחץ/י רווח.</p>
+            <div class="legend">
+              <span><i class="dot hebrew"></i>עברית</span>
+              <span><i class="dot vowels"></i>ניקוד</span>
+              <span><i class="dot english"></i>English</span>
+            </div>
+          </div>
+
+          <div id="challenge-card" class="lesson-card hidden">
+            <p id="challenge-world" class="eyebrow"></p>
+            <h2 id="challenge-title"></h2>
+            <p id="challenge-rule" class="rule-text"></p>
+            <div id="word-target" class="word-target" aria-live="polite"></div>
+            <div id="letter-bank" class="letter-bank" aria-label="אותיות לגרירה"></div>
+            <div id="answer-slots" class="answer-slots" aria-label="אזור בניית מילה"></div>
+            <label class="type-row">
+              <span id="typing-label">או הקלד/י כאן:</span>
+              <input id="typed-answer" autocomplete="off" inputmode="text">
+            </label>
+            <div class="actions">
+              <button id="check-answer" type="button">בדיקה</button>
+              <button id="hint-button" type="button">רמז</button>
+              <button id="close-challenge" type="button">חזרה למפה</button>
+            </div>
+            <p id="feedback" class="feedback" aria-live="polite"></p>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
