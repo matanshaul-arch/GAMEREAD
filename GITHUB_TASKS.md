@@ -11,6 +11,7 @@ Goal: verify that core game logic does not regress.
 Tasks:
 
 - [x] Add content validation for missing fields and missing challenge references.
+- [x] Validate distractor letters for every challenge.
 - [ ] Test answer normalization.
 - [ ] Test drag-built answer order for RTL and LTR words.
 - [ ] Test that stars increase only on correct answers.
@@ -47,6 +48,21 @@ Tasks:
 Acceptance check:
 
 - A full challenge can be completed with keyboard only.
+
+### Issue 16: Improve letter-choice challenge quality
+
+Goal: make word-building tasks require real selection, not only ordering.
+
+Tasks:
+
+- [x] Add distractor letters/chunks to all current challenges.
+- [x] Keep answer letters separate from distractors in content data.
+- [x] Validate that answer letters and distractors do not duplicate each other.
+- [ ] Add adaptive distractors by level, for example visually similar letters or same-vowel chunks.
+
+Acceptance check:
+
+- A learner must choose the correct letters from a larger bank before arranging the word.
 
 ### Issue 4: Add parent/teacher progress view
 

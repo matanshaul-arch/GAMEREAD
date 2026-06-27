@@ -36,6 +36,13 @@ for (const [id, challenge] of Object.entries(content.challenges)) {
 
   assert.ok(Array.isArray(challenge.letters), `${id}.letters must be an array`);
   assert.ok(challenge.letters.length > 0, `${id}.letters must not be empty`);
+  assert.ok(Array.isArray(challenge.distractors), `${id}.distractors must be an array`);
+  assert.ok(challenge.distractors.length > 0, `${id}.distractors must not be empty`);
+  assert.equal(
+    new Set([...challenge.letters, ...challenge.distractors]).size,
+    challenge.letters.length + challenge.distractors.length,
+    `${id}.letters and ${id}.distractors must not contain duplicates`
+  );
   assert.ok(["rtl", "ltr"].includes(challenge.direction), `${id}.direction must be rtl or ltr`);
 
   if (challenge.mode === "story") {

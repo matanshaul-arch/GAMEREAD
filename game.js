@@ -270,7 +270,7 @@ function openChallenge(world) {
   typingLabel.textContent = activeChallenge.direction === "rtl" ? "או הקלד/י כאן:" : "Or type here:";
   renderStory(activeChallenge);
   renderReading(activeChallenge);
-  renderLetters(activeChallenge.letters);
+  renderLetters(getLetterOptions(activeChallenge));
 }
 
 window.openLearningChallenge = openChallenge;
@@ -339,6 +339,11 @@ function selectReadingChoice(button, choice) {
     item.classList.remove("selected");
   });
   button.classList.add("selected");
+}
+
+function getLetterOptions(challenge) {
+  const distractors = Array.isArray(challenge.distractors) ? challenge.distractors : [];
+  return [...challenge.letters, ...distractors];
 }
 
 function renderLetters(letters) {
