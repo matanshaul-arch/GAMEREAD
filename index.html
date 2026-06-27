@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ממלכת המילים הקסומה</title>
-    <link rel="stylesheet" href="styles.css?v=3d-courtyard-1">
+    <link rel="stylesheet" href="styles.css?v=reading-mode-1">
   </head>
   <body>
     <main class="game-shell" aria-labelledby="game-title">
@@ -54,6 +54,15 @@
               </div>
               <p id="voice-status" class="voice-status"></p>
             </div>
+            <div id="reading-section" class="reading-section hidden">
+              <div id="reading-passage" class="reading-passage" aria-live="polite"></div>
+              <div id="focus-words" class="focus-words"></div>
+              <div class="voice-row">
+                <button id="read-passage" type="button">הקראת הקטע</button>
+              </div>
+              <p id="reading-question" class="reading-question"></p>
+              <div id="reading-choices" class="reading-choices" aria-label="תשובות לשאלת הבנת הנקרא"></div>
+            </div>
             <div id="word-target" class="word-target" aria-live="polite"></div>
             <div id="letter-bank" class="letter-bank" aria-label="אותיות לגרירה"></div>
             <div id="answer-slots" class="answer-slots" aria-label="אזור בניית מילה"></div>
@@ -72,8 +81,8 @@
       </section>
     </main>
 
-    <script src="content.js"></script>
-    <script src="game.js"></script>
-    <script type="module" src="scene3d.js?v=3d-courtyard-8"></script>
+    <script src="content.js?v=reading-mode-1"></script>
+    <script src="game.js?v=reading-mode-2"></script>
+    <script type="module" src="scene3d.js?v=reading-mode-1"></script>
   </body>
 </html>

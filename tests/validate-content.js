@@ -42,6 +42,16 @@ for (const [id, challenge] of Object.entries(content.challenges)) {
     assert.ok(challenge.story, `${id}.story is required for story mode`);
     assert.ok(challenge.dictationPrompt, `${id}.dictationPrompt is required for story mode`);
     assert.ok(challenge.speechLang, `${id}.speechLang is required for story mode`);
+  } else if (challenge.mode === "reading") {
+    assert.ok(Array.isArray(challenge.passage), `${id}.passage must be an array for reading mode`);
+    assert.ok(challenge.passage.length > 0, `${id}.passage must not be empty`);
+    assert.ok(challenge.question, `${id}.question is required for reading mode`);
+    assert.ok(Array.isArray(challenge.choices), `${id}.choices must be an array for reading mode`);
+    assert.ok(challenge.choices.length >= 2, `${id}.choices must include at least two answers`);
+    assert.ok(challenge.correctChoice, `${id}.correctChoice is required for reading mode`);
+    assert.ok(challenge.choices.includes(challenge.correctChoice), `${id}.correctChoice must be one of choices`);
+    assert.ok(Array.isArray(challenge.focusWords), `${id}.focusWords must be an array for reading mode`);
+    assert.ok(challenge.speechLang, `${id}.speechLang is required for reading mode`);
   } else {
     assert.equal(challenge.target, challenge.answer, `${id}.target should match answer for word mode`);
   }

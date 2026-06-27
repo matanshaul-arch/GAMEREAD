@@ -69,17 +69,21 @@ Goal: support short reading passages and dictation practice.
 
 Tasks:
 
+- [x] Add reading-mode content fields.
+- [x] Add short passages and comprehension questions.
+- [x] Add reading answer choices.
 - [x] Add story-mode content fields.
 - [x] Add read-aloud button using browser speech synthesis.
 - [x] Add dictation playback button.
 - [x] Reuse typing and letter-building answer checks.
 - [x] Show whether browser speech is available.
 - [ ] Add tests for story-mode validation and answer behavior.
+- [ ] Add tests for reading answer behavior.
 - [ ] Decide whether production audio should use browser TTS, recorded audio, or generated audio files.
 
 Acceptance check:
 
-- A child can hear a story, replay dictation, and type or build the dictated word.
+- A child can read a short passage, answer a comprehension question, hear a story, replay dictation, and type or build a key word.
 
 ## Milestone 2: Learning depth
 
@@ -204,6 +208,21 @@ Tasks:
 Acceptance check:
 
 - Character spec is clear enough to build or generate original assets.
+
+### Issue 15: Upgrade the 3D learning world art direction
+
+Goal: move from a technical courtyard prototype to a richer original learning world.
+
+Tasks:
+
+- Define a small world map with separate zones: reading library, syllable bridge, English tower, nikud spring, and dictation gate.
+- Give every zone a visual purpose tied to its learning mechanic.
+- Improve player scale, camera framing, and environmental depth.
+- Keep all art direction original and avoid copying protected IP or branded educational games.
+
+Acceptance check:
+
+- A child can understand from the map what each learning zone is for, before opening the lesson panel.
 
 ## Security and privacy tasks
 

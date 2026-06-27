@@ -11,6 +11,11 @@ const challengeRule = document.getElementById("challenge-rule");
 const storySection = document.getElementById("story-section");
 const storyText = document.getElementById("story-text");
 const voiceStatus = document.getElementById("voice-status");
+const readingSection = document.getElementById("reading-section");
+const readingPassage = document.getElementById("reading-passage");
+const focusWords = document.getElementById("focus-words");
+const readingQuestion = document.getElementById("reading-question");
+const readingChoices = document.getElementById("reading-choices");
 const wordTarget = document.getElementById("word-target");
 const letterBank = document.getElementById("letter-bank");
 const answerSlots = document.getElementById("answer-slots");
@@ -38,6 +43,8 @@ const challenges = learningContent.challenges;
 const blockedTiles = new Set(["0,0", "1,0", "9,6", "6,0", "6,1"]);
 const keys = new Set();
 let activeChallenge = null;
+let selectedReadingChoice = "";
+let readingComprehensionPassed = false;
 let lastMoveTime = 0;
 
 function drawMap() {
@@ -259,8 +266,10 @@ function openChallenge(world) {
   typedAnswer.value = "";
   feedback.textContent = "";
   feedback.className = "feedback";
+  readingComprehensionPassed = false;
   typingLabel.textContent = activeChallenge.direction === "rtl" ? "או הקלד/י כאן:" : "Or type here:";
   renderStory(activeChallenge);
+  renderReading(activeChallenge);
   renderLetters(activeChallenge.letters);
 }
 
@@ -280,6 +289,56 @@ function renderStory(challenge) {
   voiceStatus.textContent = canSpeak()
     ? "ההקראה זמינה בדפדפן הזה."
     : "הקראה קולית אינה זמינה בדפדפן הזה; אפשר לקרוא את הטקסט על המסך.";
+}
+
+function renderReading(challenge) {
+  selectedReadingChoice = "";
+  readingChoices.innerHTML = "";
+
+  if (challenge.mode !== "reading") {
+    readingSection.classList.add("hidden");
+    readingPassage.textContent = "";
+    focusWords.textContent = "";
+    readingQuestion.textContent = "";
+    return;
+  }
+
+  readingSection.classList.remove("hidden");
+  readingPassage.dir = challenge.direction;
+  readingPassage.textContent = "";
+  challenge.passage.forEach((line) => {
+    const paragraph = document.createElement("p");
+    paragraph.textContent = line;
+    readingPassage.appendChild(paragraph);
+  });
+
+  focusWords.dir = challenge.direction;
+  focusWords.textContent = "";
+  challenge.focusWords.forEach((word) => {
+    const chip = document.createElement("span");
+    chip.textContent = word;
+    focusWords.appendChild(chip);
+  });
+
+  readingQuestion.textContent = challenge.question;
+  readingQuestion.dir = challenge.direction;
+  readingChoices.dir = challenge.direction;
+  challenge.choices.forEach((choice) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "choice-button";
+    button.textContent = choice;
+    button.addEventListener("click", () => selectReadingChoice(button, choice));
+    readingChoices.appendChild(button);
+  });
+}
+
+function selectReadingChoice(button, choice) {
+  selectedReadingChoice = choice;
+  Array.from(readingChoices.querySelectorAll(".choice-button")).forEach((item) => {
+    item.classList.remove("selected");
+  });
+  button.classList.add("selected");
 }
 
 function renderLetters(letters) {
@@ -339,6 +398,22 @@ function checkAnswer() {
     return;
   }
 
+  if (activeChallenge.mode === "reading") {
+    if (!readingComprehensionPassed) {
+      checkReadingAnswer();
+      return;
+    }
+
+    const hasWordAttempt = normalizeAnswer(typedAnswer.value) || normalizeAnswer(getBuiltAnswer());
+    if (!hasWordAttempt) {
+      feedback.textContent = activeChallenge.direction === "rtl"
+        ? "מצוין. עכשיו בנה/י או הקלד/י את מילת המפתח למטה."
+        : "Great. Now build or type the key word below.";
+      feedback.className = "feedback";
+      return;
+    }
+  }
+
   const typed = normalizeAnswer(typedAnswer.value);
   const built = normalizeAnswer(getBuiltAnswer());
   const answer = normalizeAnswer(activeChallenge.answer);
@@ -359,6 +434,36 @@ function checkAnswer() {
   }
 
   feedback.textContent = "עוד ניסיון. בדוק/בדקי את הסדר ואת הניקוד, ואז נסה/י שוב.";
+  feedback.className = "feedback try";
+}
+
+function checkReadingAnswer() {
+  if (!selectedReadingChoice) {
+    feedback.textContent = activeChallenge.direction === "rtl"
+      ? "בחר/י תשובה לשאלת הקריאה."
+      : "Choose an answer to the reading question.";
+    feedback.className = "feedback try";
+    return;
+  }
+
+  if (selectedReadingChoice === activeChallenge.correctChoice) {
+    readingComprehensionPassed = true;
+    player.stars += 1;
+    if (player.stars % 3 === 0) {
+      player.gates += 1;
+    }
+    updateStats();
+    feedback.textContent = activeChallenge.direction === "rtl"
+      ? "נכון. הבנת את הקטע. עכשיו אפשר לתרגל גם את מילת המפתח למטה."
+      : "Correct. You understood the passage. Now you can also practice the key word below.";
+    feedback.className = "feedback good";
+    drawMap();
+    return;
+  }
+
+  feedback.textContent = activeChallenge.direction === "rtl"
+    ? "עוד ניסיון. חזור/חזרי לשורה המתאימה בקטע."
+    : "Try again. Look back at the matching sentence.";
   feedback.className = "feedback try";
 }
 
@@ -473,6 +578,11 @@ document.getElementById("read-story").addEventListener("click", () => {
 document.getElementById("play-dictation").addEventListener("click", () => {
   if (activeChallenge?.dictationPrompt) {
     speakText(activeChallenge.dictationPrompt, activeChallenge.speechLang);
+  }
+});
+document.getElementById("read-passage").addEventListener("click", () => {
+  if (activeChallenge?.passage) {
+    speakText(activeChallenge.passage.join(" "), activeChallenge.speechLang);
   }
 });
 

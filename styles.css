@@ -211,7 +211,8 @@ h2 {
   margin: 14px 0;
 }
 
-.story-section.hidden {
+.story-section.hidden,
+.reading-section.hidden {
   display: none;
 }
 
@@ -224,6 +225,74 @@ h2 {
   font-size: 1.2rem;
   font-weight: 700;
   line-height: 1.6;
+}
+
+.reading-section {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.reading-passage {
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  background: #f2fbff;
+  padding: 14px;
+  color: var(--ink);
+  font-size: 1.24rem;
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.reading-passage p {
+  margin-bottom: 8px;
+}
+
+.reading-passage p:last-child {
+  margin-bottom: 0;
+}
+
+.focus-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.focus-words span {
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  background: #fff2b8;
+  box-shadow: 0 4px 0 #e2bb4f;
+  padding: 6px 10px;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.reading-question {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.reading-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.choice-button {
+  min-height: 44px;
+  background: #ffffff;
+  color: var(--ink);
+  box-shadow: 0 5px 0 #c9d8eb;
+}
+
+.choice-button:hover,
+.choice-button.selected {
+  background: #dff3ff;
+  color: #17324a;
 }
 
 .voice-row {
