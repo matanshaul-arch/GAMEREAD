@@ -240,6 +240,102 @@ Acceptance check:
 
 - A child can understand from the map what each learning zone is for, before opening the lesson panel.
 
+## Milestone 4: High-quality adventure vertical slice
+
+### Issue 17: Create an original art direction bible
+
+Goal: define a strong visual identity before adding more 3D assets.
+
+Tasks:
+
+- Define 3 visual pillars: readable for children, adventurous, and educationally meaningful.
+- Use games like Zelda only as quality/reference inspiration: readable silhouettes, clear landmarks, warm exploration, not copied characters, map layouts, icons, music, or story elements.
+- Define palette, lighting, shape language, camera distance, and UI integration rules.
+- Define forbidden references: no protected brands, no copied schools, houses, crests, creatures, item names, or level layouts.
+- Add 2-3 original theme directions to choose from, for example: Word Isles, Lantern Library, Sky Syllable Grove.
+
+Acceptance check:
+
+- A developer can improve the 3D scene without guessing the visual style or copying a known game.
+
+### Issue 18: Build a polished 3D vertical slice map
+
+Goal: replace the flat courtyard feeling with one small but high-quality playable learning zone.
+
+Tasks:
+
+- Build one compact hub with height variation, paths, landmarks, readable boundaries, and a clear destination.
+- Add separate visual zones for reading, nikud, English, and dictation.
+- Add environmental storytelling: floating letters, book arches, glowing reading stones, syllable bridge, and a dictation gate.
+- Improve material variety: grass, stone, wood, paper, water/light, and soft magical highlights.
+- Keep geometry lightweight enough for browser performance.
+
+Acceptance check:
+
+- On first glance, the map feels like a small adventure game world, not a technical test courtyard.
+
+### Issue 19: Design and implement the first original player character
+
+Goal: replace the placeholder with a memorable, child-friendly original character.
+
+Tasks:
+
+- Choose a character concept such as a young Word Keeper with a pencil-wand and book satchel.
+- Define silhouette, colors, proportions, and accessories.
+- Implement a low-poly version directly in Three.js or via local generated asset workflow.
+- Add 3 states: idle, walking, and learning/success.
+- Keep the design legally original and visually distinct from famous wizard/adventure characters.
+
+Acceptance check:
+
+- The player character is recognizable at gameplay distance and feels part of the learning world.
+
+### Issue 20: Add a guide NPC and learning feedback moments
+
+Goal: make the child feel guided inside the world, not only inside the lesson panel.
+
+Tasks:
+
+- Add one original NPC guide near the first path.
+- Show short world-level prompts, for example: "בוא/י נקרא את האבן המאירה".
+- Trigger small visual feedback after success: gate glow, path light, book opening, or star particle burst.
+- Keep prompts short and age-appropriate.
+
+Acceptance check:
+
+- A new player understands where to go and receives visible world feedback after learning success.
+
+### Issue 21: Improve camera, movement, and collision feel
+
+Goal: make the 3D scene feel closer to an adventure game instead of a simple demo.
+
+Tasks:
+
+- Add smoother camera follow with stable framing.
+- Add simple collision boundaries around walls, water, and landmarks.
+- Tune player speed, acceleration, and turning.
+- Add station-facing camera hints when approaching a learning area.
+- Verify desktop and mobile framing.
+
+Acceptance check:
+
+- Movement feels intentional, readable, and comfortable for a child using keyboard or future touch controls.
+
+### Issue 22: Add visual QA checks for 3D quality
+
+Goal: prevent visual regressions as the world becomes richer.
+
+Tasks:
+
+- Keep the canvas nonblank pixel check.
+- Add browser checks for station prompts, reading challenge opening, and letter distractor count.
+- Add screenshot review checklist for desktop and mobile.
+- Track frame count and obvious rendering failures.
+
+Acceptance check:
+
+- Basic automated and manual checks catch blank scenes, missing UI, broken stations, and overcrowded layouts.
+
 ## Security and privacy tasks
 
 ### Issue 14: Document child privacy boundaries
@@ -256,7 +352,7 @@ Acceptance check:
 
 - README includes privacy note.
 
-### Issue 15: Add content safety review process
+### Issue 23: Add content safety review process
 
 Goal: avoid inappropriate or legally risky content.
 
