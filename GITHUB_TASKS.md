@@ -10,10 +10,11 @@ Goal: verify that core game logic does not regress.
 
 Tasks:
 
-- Test answer normalization.
-- Test drag-built answer order for RTL and LTR words.
-- Test that stars increase only on correct answers.
-- Test that gates open after 3 successful answers.
+- [x] Add content validation for missing fields and missing challenge references.
+- [ ] Test answer normalization.
+- [ ] Test drag-built answer order for RTL and LTR words.
+- [ ] Test that stars increase only on correct answers.
+- [ ] Test that gates open after 3 successful answers.
 
 Acceptance check:
 
@@ -25,13 +26,13 @@ Goal: make vocabulary easier to expand without editing game logic.
 
 Tasks:
 
-- Extract `challenges` into `content.js` or JSON.
-- Keep Hebrew direction and English direction explicit.
-- Add validation for missing fields.
+- [x] Extract `challenges` into `content.js` or JSON.
+- [x] Keep Hebrew direction and English direction explicit.
+- [x] Add validation for missing fields.
 
 Acceptance check:
 
-- The game still loads all existing challenges.
+- [x] The game still loads all existing challenges.
 
 ### Issue 3: Improve keyboard accessibility
 
