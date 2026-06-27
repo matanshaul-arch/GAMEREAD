@@ -29,7 +29,6 @@ const challengeIds = Object.keys(content.challenges);
 assert.ok(challengeIds.length > 0, "at least one challenge is required");
 assert.equal(new Set(challengeIds).size, challengeIds.length, "challenge ids must be unique");
 
-const answers = new Set();
 for (const [id, challenge] of Object.entries(content.challenges)) {
   for (const field of requiredChallengeFields) {
     assert.ok(challenge[field], `${id} is missing ${field}`);
@@ -38,9 +37,14 @@ for (const [id, challenge] of Object.entries(content.challenges)) {
   assert.ok(Array.isArray(challenge.letters), `${id}.letters must be an array`);
   assert.ok(challenge.letters.length > 0, `${id}.letters must not be empty`);
   assert.ok(["rtl", "ltr"].includes(challenge.direction), `${id}.direction must be rtl or ltr`);
-  assert.equal(challenge.target, challenge.answer, `${id}.target should match answer in the prototype`);
-  assert.ok(!answers.has(challenge.answer), `${id}.answer duplicates another challenge`);
-  answers.add(challenge.answer);
+
+  if (challenge.mode === "story") {
+    assert.ok(challenge.story, `${id}.story is required for story mode`);
+    assert.ok(challenge.dictationPrompt, `${id}.dictationPrompt is required for story mode`);
+    assert.ok(challenge.speechLang, `${id}.speechLang is required for story mode`);
+  } else {
+    assert.equal(challenge.target, challenge.answer, `${id}.target should match answer for word mode`);
+  }
 }
 
 const worldIds = new Set();

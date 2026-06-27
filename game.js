@@ -8,6 +8,9 @@ const challengeCard = document.getElementById("challenge-card");
 const challengeWorld = document.getElementById("challenge-world");
 const challengeTitle = document.getElementById("challenge-title");
 const challengeRule = document.getElementById("challenge-rule");
+const storySection = document.getElementById("story-section");
+const storyText = document.getElementById("story-text");
+const voiceStatus = document.getElementById("voice-status");
 const wordTarget = document.getElementById("word-target");
 const letterBank = document.getElementById("letter-bank");
 const answerSlots = document.getElementById("answer-slots");
@@ -58,7 +61,8 @@ function drawMap() {
 function drawPaths() {
   const pathTiles = [
     [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5], [8, 5],
-    [2, 4], [2, 3], [2, 2], [5, 4], [5, 3], [8, 4], [8, 3], [8, 2],
+    [2, 4], [2, 3], [2, 2], [4, 4], [4, 3], [4, 2], [4, 1],
+    [5, 4], [5, 3], [8, 4], [8, 3], [8, 2],
   ];
 
   ctx.fillStyle = "#d2ba80";
@@ -78,7 +82,17 @@ function drawWorld(world) {
   ctx.font = "bold 18px Arial";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(world.id === "english" ? "A" : "א", cx, cy);
+  ctx.fillText(getWorldMarker(world), cx, cy);
+}
+
+function getWorldMarker(world) {
+  if (world.id === "english") {
+    return "A";
+  }
+  if (world.id === "stories") {
+    return "ס";
+  }
+  return "א";
 }
 
 function drawPlayer() {
@@ -133,7 +147,24 @@ function openChallenge(world) {
   feedback.textContent = "";
   feedback.className = "feedback";
   typingLabel.textContent = activeChallenge.direction === "rtl" ? "או הקלד/י כאן:" : "Or type here:";
+  renderStory(activeChallenge);
   renderLetters(activeChallenge.letters);
+}
+
+function renderStory(challenge) {
+  if (challenge.mode !== "story") {
+    storySection.classList.add("hidden");
+    storyText.textContent = "";
+    voiceStatus.textContent = "";
+    return;
+  }
+
+  storySection.classList.remove("hidden");
+  storyText.textContent = challenge.story;
+  storyText.dir = challenge.direction;
+  voiceStatus.textContent = canSpeak()
+    ? "ההקראה זמינה בדפדפן הזה."
+    : "הקראה קולית אינה זמינה בדפדפן הזה; אפשר לקרוא את הטקסט על המסך.";
 }
 
 function renderLetters(letters) {
@@ -214,6 +245,24 @@ function checkAnswer() {
 
   feedback.textContent = "עוד ניסיון. בדוק/בדקי את הסדר ואת הניקוד, ואז נסה/י שוב.";
   feedback.className = "feedback try";
+}
+
+function speakText(text, lang) {
+  if (!canSpeak()) {
+    feedback.textContent = "הדפדפן הזה לא תומך בהקראה קולית.";
+    feedback.className = "feedback try";
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang || activeChallenge?.speechLang || "he-IL";
+  utterance.rate = 0.85;
+  window.speechSynthesis.speak(utterance);
+}
+
+function canSpeak() {
+  return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
 }
 
 function updateStats() {
@@ -301,6 +350,16 @@ document.getElementById("hint-button").addEventListener("click", () => {
   }
 });
 document.getElementById("close-challenge").addEventListener("click", closeChallenge);
+document.getElementById("read-story").addEventListener("click", () => {
+  if (activeChallenge?.story) {
+    speakText(activeChallenge.story, activeChallenge.speechLang);
+  }
+});
+document.getElementById("play-dictation").addEventListener("click", () => {
+  if (activeChallenge?.dictationPrompt) {
+    speakText(activeChallenge.dictationPrompt, activeChallenge.speechLang);
+  }
+});
 
 setupDropZone(letterBank);
 setupDropZone(answerSlots);

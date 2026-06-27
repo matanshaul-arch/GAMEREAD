@@ -63,9 +63,27 @@ Acceptance check:
 
 - Parent view shows practiced words and weak spots.
 
+### Issue 5: Add read-aloud story and dictation mode
+
+Goal: support short reading passages and dictation practice.
+
+Tasks:
+
+- [x] Add story-mode content fields.
+- [x] Add read-aloud button using browser speech synthesis.
+- [x] Add dictation playback button.
+- [x] Reuse typing and letter-building answer checks.
+- [x] Show whether browser speech is available.
+- [ ] Add tests for story-mode validation and answer behavior.
+- [ ] Decide whether production audio should use browser TTS, recorded audio, or generated audio files.
+
+Acceptance check:
+
+- A child can hear a story, replay dictation, and type or build the dictated word.
+
 ## Milestone 2: Learning depth
 
-### Issue 5: Expand Hebrew vocabulary set
+### Issue 6: Expand Hebrew vocabulary set
 
 Goal: grow from 4 Hebrew words to 20 structured words.
 
@@ -79,7 +97,7 @@ Acceptance check:
 
 - Every word has target, letter chunks, answer, rule, and hint.
 
-### Issue 6: Expand English phonics content
+### Issue 7: Expand English phonics content
 
 Goal: add more CVC words and short vowel practice.
 
@@ -93,7 +111,7 @@ Acceptance check:
 
 - Each vowel has at least 5 words.
 
-### Issue 7: Add level selection
+### Issue 8: Add level selection
 
 Goal: avoid one-size-fits-all difficulty.
 
@@ -109,7 +127,7 @@ Acceptance check:
 
 ## Milestone 3: Game world
 
-### Issue 8: Add theme packs
+### Issue 9: Add theme packs
 
 Goal: support different child interests without copying protected IP.
 
@@ -123,7 +141,7 @@ Acceptance check:
 
 - Theme can be switched without changing challenge answers.
 
-### Issue 9: Add simple NPC guide
+### Issue 10: Add simple NPC guide
 
 Goal: make instructions clearer for independent play.
 
@@ -137,7 +155,7 @@ Acceptance check:
 
 - A new player understands what to do in the first minute.
 
-### Issue 10: Add local progress persistence
+### Issue 11: Add local progress persistence
 
 Goal: keep stars and completed gates after refresh.
 
@@ -151,9 +169,40 @@ Acceptance check:
 
 - Refreshing the page keeps non-sensitive progress.
 
+### Issue 12: Create a 3D technical prototype
+
+Goal: prove that a small Three.js scene can run reliably before replacing the 2D map.
+
+Tasks:
+
+- Create one 3D room or courtyard.
+- Add one original player character placeholder.
+- Support keyboard movement.
+- Keep the learning panel outside the 3D scene for the first version.
+- Verify desktop and mobile framing.
+
+Acceptance check:
+
+- The 3D scene is nonblank, interactive, and does not break existing learning tasks.
+
+### Issue 13: Character design specification
+
+Goal: define the player character before building final assets.
+
+Tasks:
+
+- Choose character role, name, colors, and accessories.
+- Avoid protected brands and copied character designs.
+- Define 3 states: idle, walking, learning.
+- Keep a simple low-poly version for the prototype.
+
+Acceptance check:
+
+- Character spec is clear enough to build or generate original assets.
+
 ## Security and privacy tasks
 
-### Issue 11: Document child privacy boundaries
+### Issue 14: Document child privacy boundaries
 
 Goal: make clear what data is and is not collected.
 
@@ -167,7 +216,7 @@ Acceptance check:
 
 - README includes privacy note.
 
-### Issue 12: Add content safety review process
+### Issue 15: Add content safety review process
 
 Goal: avoid inappropriate or legally risky content.
 
