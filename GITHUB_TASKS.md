@@ -136,6 +136,7 @@ Tasks:
 - Create original theme options: magic school, space, animals, ocean.
 - Keep learning mechanics identical across themes.
 - Separate visual theme from educational content.
+- Keep visual inspiration generic; do not copy Matific or other branded assets.
 
 Acceptance check:
 
