@@ -182,12 +182,13 @@ Tasks:
 - [x] Keep the learning panel outside the 3D scene for the first version.
 - [x] Verify desktop framing and nonblank canvas.
 - [ ] Verify mobile framing.
-- [ ] Improve camera smoothing and station proximity cues.
+- [x] Add station proximity cues.
+- [ ] Improve camera smoothing.
 - [ ] Replace placeholder character with designed original character.
 
 Acceptance check:
 
-- The 3D scene is nonblank, interactive, and does not break existing learning tasks.
+- The 3D scene is nonblank, interactive, shows nearby station prompts, and does not break existing learning tasks.
 
 ### Issue 13: Character design specification
 

@@ -104,6 +104,10 @@ h2 {
   min-width: 0;
 }
 
+.map-panel {
+  position: relative;
+}
+
 #game-map,
 #game-map-3d {
   display: block;
@@ -121,6 +125,25 @@ h2 {
 #game-map.hidden,
 #game-map-3d.hidden {
   display: none;
+}
+
+.station-prompt {
+  position: absolute;
+  left: 50%;
+  bottom: 82px;
+  transform: translateX(-50%);
+  width: min(88%, 430px);
+  border: 3px solid #ffffff;
+  border-radius: 8px;
+  background: rgba(24, 33, 47, 0.88);
+  box-shadow: 0 8px 0 rgba(43, 86, 136, 0.35);
+  color: #ffffff;
+  padding: 10px 14px;
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.35;
+  pointer-events: none;
 }
 
 .controls-help {

@@ -2,6 +2,7 @@ import * as THREE from "./vendor/three.module.js";
 
 const sceneCanvas = document.getElementById("game-map-3d");
 const legacyCanvas = document.getElementById("game-map");
+const stationPrompt = document.getElementById("station-prompt");
 const content = window.LEARNING_CONTENT;
 
 const renderer = new THREE.WebGLRenderer({
@@ -32,6 +33,7 @@ const interactables = [];
 const rayTarget = new THREE.Vector3();
 let playerGroup;
 let frameCount = 0;
+let promptedStationId = "";
 
 initScene();
 resize();
@@ -339,6 +341,7 @@ function updatePlayer() {
   rayTarget.copy(player.position).add(new THREE.Vector3(0, 1.2, 0));
   camera.position.lerp(new THREE.Vector3(player.position.x, 4.9, player.position.z + 8.2), 0.08);
   camera.lookAt(rayTarget);
+  updateStationPrompt();
 }
 
 function movePlayerByKey(key, amount) {
@@ -365,6 +368,32 @@ function getNearbyStation() {
     const distance = station.position.distanceTo(player.position);
     return distance < 1.8;
   });
+}
+
+function updateStationPrompt() {
+  if (!stationPrompt) {
+    return;
+  }
+
+  const station = getNearbyStation();
+  const stationId = station?.userData.worldId || "";
+  if (stationId === promptedStationId) {
+    return;
+  }
+
+  promptedStationId = stationId;
+  if (!station) {
+    stationPrompt.classList.add("hidden");
+    stationPrompt.textContent = "";
+    sceneCanvas.dataset.nearStation = "";
+    return;
+  }
+
+  const world = content.worlds.find((item) => item.id === stationId);
+  const worldName = world?.name || "תחנת לימוד";
+  stationPrompt.textContent = `הגעת אל ${worldName} - לחץ/י רווח למשימה`;
+  stationPrompt.classList.remove("hidden");
+  sceneCanvas.dataset.nearStation = stationId;
 }
 
 function animate(time) {
