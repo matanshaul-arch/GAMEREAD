@@ -176,11 +176,14 @@ Goal: prove that a small Three.js scene can run reliably before replacing the 2D
 
 Tasks:
 
-- Create one 3D room or courtyard.
-- Add one original player character placeholder.
-- Support keyboard movement.
-- Keep the learning panel outside the 3D scene for the first version.
-- Verify desktop and mobile framing.
+- [x] Create one 3D room or courtyard.
+- [x] Add one original player character placeholder.
+- [x] Support keyboard movement.
+- [x] Keep the learning panel outside the 3D scene for the first version.
+- [x] Verify desktop framing and nonblank canvas.
+- [ ] Verify mobile framing.
+- [ ] Improve camera smoothing and station proximity cues.
+- [ ] Replace placeholder character with designed original character.
 
 Acceptance check:
 

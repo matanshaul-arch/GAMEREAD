@@ -264,6 +264,8 @@ function openChallenge(world) {
   renderLetters(activeChallenge.letters);
 }
 
+window.openLearningChallenge = openChallenge;
+
 function renderStory(challenge) {
   if (challenge.mode !== "story") {
     storySection.classList.add("hidden");

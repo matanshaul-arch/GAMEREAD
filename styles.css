@@ -104,15 +104,23 @@ h2 {
   min-width: 0;
 }
 
-#game-map {
+#game-map,
+#game-map-3d {
   display: block;
   width: 100%;
+  height: min(62vh, 560px);
+  min-height: 420px;
   max-height: calc(100vh - 180px);
   aspect-ratio: 10 / 7;
   border: 4px solid #ffffff;
   border-radius: 8px;
   background: #9edcff;
   box-shadow: var(--shadow);
+}
+
+#game-map.hidden,
+#game-map-3d.hidden {
+  display: none;
 }
 
 .controls-help {
