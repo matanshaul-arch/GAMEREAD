@@ -31,6 +31,9 @@ const player = {
 const keys = new Set();
 const interactables = [];
 const rayTarget = new THREE.Vector3();
+const cameraTargetPosition = new THREE.Vector3();
+const cameraLookTarget = new THREE.Vector3();
+const stationFocusTarget = new THREE.Vector3();
 let playerGroup;
 let frameCount = 0;
 let promptedStationId = "";
@@ -463,24 +466,46 @@ function onKeyUp(event) {
   keys.delete(key);
 }
 
-function updatePlayer() {
+function updatePlayer(time) {
   const movement = new THREE.Vector3();
   if (keys.has("arrowup") || keys.has("w")) movement.z -= 1;
   if (keys.has("arrowdown") || keys.has("s")) movement.z += 1;
   if (keys.has("arrowleft") || keys.has("a")) movement.x -= 1;
   if (keys.has("arrowright") || keys.has("d")) movement.x += 1;
 
-  if (movement.lengthSq() > 0) {
+  const isMoving = movement.lengthSq() > 0;
+  if (isMoving) {
     applyPlayerMovement(movement, player.speed);
   }
 
   playerGroup.position.copy(player.position);
+  playerGroup.position.y = isMoving ? Math.sin(time * 0.012) * 0.04 : Math.sin(time * 0.003) * 0.025;
   playerGroup.rotation.y = player.rotationY + Math.PI;
 
-  rayTarget.copy(player.position).add(new THREE.Vector3(0, 1.2, 0));
-  camera.position.lerp(new THREE.Vector3(player.position.x, 4.9, player.position.z + 8.2), 0.08);
-  camera.lookAt(rayTarget);
+  updateCamera();
   updateStationPrompt();
+}
+
+function updateCamera() {
+  const station = getNearbyStation();
+  const aspect = camera.aspect || 1;
+  const cameraHeight = aspect < 1 ? 6.2 : 5.35;
+  const cameraDistance = aspect < 1 ? 9.4 : 8.0;
+  const cameraXOffset = aspect < 1 ? 0 : -0.8;
+
+  cameraLookTarget.copy(player.position).add(rayTarget.set(0, 1.22, 0));
+  if (station) {
+    stationFocusTarget.copy(station.position).add(rayTarget.set(0, 1.15, 0));
+    cameraLookTarget.lerp(stationFocusTarget, 0.35);
+  }
+
+  cameraTargetPosition.set(
+    player.position.x + cameraXOffset,
+    cameraHeight,
+    player.position.z + cameraDistance
+  );
+  camera.position.lerp(cameraTargetPosition, 0.075);
+  camera.lookAt(cameraLookTarget);
 }
 
 function movePlayerByKey(key, amount) {
@@ -536,10 +561,10 @@ function updateStationPrompt() {
 }
 
 function animate(time) {
-  updatePlayer();
+  updatePlayer(time);
   interactables.forEach((station, index) => {
     station.rotation.y = Math.sin(time * 0.001 + index) * 0.08;
-    station.children[1].position.y = 0.84 + Math.sin(time * 0.003 + index) * 0.08;
+    station.children[1].position.y = 1.18 + Math.sin(time * 0.003 + index) * 0.08;
   });
   renderer.render(scene, camera);
   updateRenderStats();
