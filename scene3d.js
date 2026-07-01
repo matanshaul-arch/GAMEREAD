@@ -19,8 +19,15 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xb9efff);
 scene.fog = new THREE.Fog(0xb9efff, 20, 50);
 
-const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
-camera.position.set(0, 5.6, 10);
+const isoTilt = Math.asin(Math.tan(30 * Math.PI / 180));
+const isoYaw = Math.PI / 4;
+const isoDirection = new THREE.Vector3(
+  Math.sin(isoYaw) * Math.cos(isoTilt),
+  Math.sin(isoTilt),
+  Math.cos(isoYaw) * Math.cos(isoTilt)
+).normalize();
+const camera = new THREE.OrthographicCamera(-8, 8, 5, -5, 0.1, 100);
+camera.position.copy(isoDirection).multiplyScalar(13);
 
 const player = {
   position: new THREE.Vector3(-7.5, 0, 5.5),
@@ -541,9 +548,8 @@ function updatePlayer(time) {
 function updateCamera() {
   const station = getNearbyStation();
   const aspect = camera.aspect || 1;
-  const cameraHeight = aspect < 1 ? 6.2 : 5.35;
-  const cameraDistance = aspect < 1 ? 9.4 : 8.0;
-  const cameraXOffset = aspect < 1 ? 0 : -0.8;
+  const cameraDistance = aspect < 1 ? 17.4 : 15.6;
+  const lookAhead = aspect < 1 ? 0.2 : 0.5;
 
   cameraLookTarget.copy(player.position).add(rayTarget.set(0, 1.22, 0));
   if (station) {
@@ -551,11 +557,8 @@ function updateCamera() {
     cameraLookTarget.lerp(stationFocusTarget, 0.35);
   }
 
-  cameraTargetPosition.set(
-    player.position.x + cameraXOffset,
-    cameraHeight,
-    player.position.z + cameraDistance
-  );
+  cameraLookTarget.z -= lookAhead;
+  cameraTargetPosition.copy(cameraLookTarget).addScaledVector(isoDirection, cameraDistance);
   camera.position.lerp(cameraTargetPosition, 0.075);
   camera.lookAt(cameraLookTarget);
 }
@@ -687,7 +690,14 @@ function updateRenderStats() {
 function resize() {
   const width = sceneCanvas.clientWidth || 640;
   const height = sceneCanvas.clientHeight || 448;
+  const aspect = width / height;
+  const viewHeight = aspect < 1 ? 12.4 : 11.2;
+  const viewWidth = viewHeight * aspect;
   renderer.setSize(width, height, false);
-  camera.aspect = width / height;
+  camera.left = -viewWidth / 2;
+  camera.right = viewWidth / 2;
+  camera.top = viewHeight / 2;
+  camera.bottom = -viewHeight / 2;
+  camera.aspect = aspect;
   camera.updateProjectionMatrix();
 }
