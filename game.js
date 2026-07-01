@@ -426,14 +426,16 @@ function checkAnswer() {
 
   if (correct) {
     player.stars += 1;
-    if (player.stars % 3 === 0) {
+    const gateOpened = player.stars % 3 === 0;
+    if (gateOpened) {
       player.gates += 1;
     }
     updateStats();
-    feedback.textContent = player.stars % 3 === 0
+    feedback.textContent = gateOpened
       ? "מצוין! שלוש הצלחות פתחו שער חדש במפה."
       : "נכון מאוד. חזרתיות קצרה עוזרת למוח לזכור.";
     feedback.className = "feedback good";
+    notifyLearningSuccess(gateOpened);
     drawMap();
     return;
   }
@@ -454,7 +456,8 @@ function checkReadingAnswer() {
   if (selectedReadingChoice === activeChallenge.correctChoice) {
     readingComprehensionPassed = true;
     player.stars += 1;
-    if (player.stars % 3 === 0) {
+    const gateOpened = player.stars % 3 === 0;
+    if (gateOpened) {
       player.gates += 1;
     }
     updateStats();
@@ -462,6 +465,7 @@ function checkReadingAnswer() {
       ? "נכון. הבנת את הקטע. עכשיו אפשר לתרגל גם את מילת המפתח למטה."
       : "Correct. You understood the passage. Now you can also practice the key word below.";
     feedback.className = "feedback good";
+    notifyLearningSuccess(gateOpened);
     drawMap();
     return;
   }
@@ -470,6 +474,17 @@ function checkReadingAnswer() {
     ? "עוד ניסיון. חזור/חזרי לשורה המתאימה בקטע."
     : "Try again. Look back at the matching sentence.";
   feedback.className = "feedback try";
+}
+
+function notifyLearningSuccess(gateOpened) {
+  window.dispatchEvent(new CustomEvent("learning-success", {
+    detail: {
+      gateOpened,
+      stars: player.stars,
+      gates: player.gates,
+      world: activeChallenge?.world || "",
+    },
+  }));
 }
 
 function speakText(text, lang) {

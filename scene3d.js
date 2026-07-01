@@ -34,6 +34,7 @@ const rayTarget = new THREE.Vector3();
 const cameraTargetPosition = new THREE.Vector3();
 const cameraLookTarget = new THREE.Vector3();
 const stationFocusTarget = new THREE.Vector3();
+const successEffects = [];
 let playerGroup;
 let frameCount = 0;
 let promptedStationId = "";
@@ -43,6 +44,7 @@ resize();
 window.learningGame3DReady = true;
 sceneCanvas.dataset.ready = "true";
 window.addEventListener("resize", resize);
+window.addEventListener("learning-success", showLearningSuccess);
 document.addEventListener("keydown", onKeyDown);
 document.addEventListener("keyup", onKeyUp);
 requestAnimationFrame(animate);
@@ -388,6 +390,56 @@ function createGem(x, z, color) {
   scene.add(gem);
 }
 
+function showLearningSuccess(event) {
+  const station = getNearbyStation();
+  const center = station?.position || player.position;
+  const gateOpened = Boolean(event.detail?.gateOpened);
+  const color = gateOpened ? 0xffd45c : 0x8cffd1;
+  const effect = new THREE.Group();
+  effect.position.set(center.x, 0.72, center.z);
+
+  const ringMaterial = new THREE.MeshStandardMaterial({
+    color,
+    emissive: color,
+    emissiveIntensity: gateOpened ? 0.85 : 0.55,
+    opacity: 0.88,
+    transparent: true,
+    roughness: 0.35,
+  });
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(gateOpened ? 1.18 : 0.92, 0.045, 10, 40), ringMaterial);
+  ring.rotation.x = Math.PI / 2;
+  effect.add(ring);
+
+  const particles = [];
+  for (let index = 0; index < 8; index += 1) {
+    const angle = (Math.PI * 2 * index) / 8;
+    const particleMaterial = new THREE.MeshStandardMaterial({
+      color,
+      emissive: color,
+      emissiveIntensity: 0.65,
+      opacity: 0.95,
+      transparent: true,
+      roughness: 0.45,
+    });
+    const particle = new THREE.Mesh(new THREE.OctahedronGeometry(gateOpened ? 0.16 : 0.12), particleMaterial);
+    particle.userData.angle = angle;
+    particle.userData.radius = gateOpened ? 0.86 : 0.68;
+    particle.position.set(Math.cos(angle) * particle.userData.radius, 0.35, Math.sin(angle) * particle.userData.radius);
+    particles.push(particle);
+    effect.add(particle);
+  }
+
+  successEffects.push({
+    group: effect,
+    ring,
+    particles,
+    startTime: performance.now(),
+    duration: gateOpened ? 1900 : 1450,
+  });
+  scene.add(effect);
+  sceneCanvas.dataset.successFeedback = String(Number(sceneCanvas.dataset.successFeedback || 0) + 1);
+}
+
 function createPlayer() {
   playerGroup = new THREE.Group();
   playerGroup.position.copy(player.position);
@@ -566,9 +618,37 @@ function animate(time) {
     station.rotation.y = Math.sin(time * 0.001 + index) * 0.08;
     station.children[1].position.y = 1.18 + Math.sin(time * 0.003 + index) * 0.08;
   });
+  updateSuccessEffects(time);
   renderer.render(scene, camera);
   updateRenderStats();
   requestAnimationFrame(animate);
+}
+
+function updateSuccessEffects(time) {
+  for (let index = successEffects.length - 1; index >= 0; index -= 1) {
+    const effect = successEffects[index];
+    const progress = Math.min((time - effect.startTime) / effect.duration, 1);
+    const fade = 1 - progress;
+    effect.group.position.y = 0.72 + progress * 0.38;
+    effect.ring.scale.setScalar(1 + progress * 0.42);
+    effect.ring.material.opacity = fade * 0.88;
+    effect.particles.forEach((particle, particleIndex) => {
+      const angle = particle.userData.angle + progress * 0.85;
+      const radius = particle.userData.radius + progress * 0.42;
+      particle.position.set(
+        Math.cos(angle) * radius,
+        0.35 + Math.sin(progress * Math.PI + particleIndex) * 0.12 + progress * 0.34,
+        Math.sin(angle) * radius
+      );
+      particle.rotation.y += 0.08;
+      particle.material.opacity = fade * 0.95;
+    });
+
+    if (progress >= 1) {
+      scene.remove(effect.group);
+      successEffects.splice(index, 1);
+    }
+  }
 }
 
 function updateRenderStats() {
